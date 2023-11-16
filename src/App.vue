@@ -1,17 +1,17 @@
 <template>
   <main
-    class="flex flex-col items-center justify-center w-screen h-screen"
+    class="flex flex-col items-center justify-center w-screen h-screen p-4"
     @contextmenu.prevent
   >
     <template v-if="completed">
-      <strong class="text-2xl font-bold mb-2"
+      <strong class="text-2xl font-bold mb-2 text-center"
         >¡Virus informático liberado con éxito!</strong
       >
-      <p class="mb-4 text-lg">
+      <p class="mb-4 text-lg text-center">
         Habéis logrado detener la producción masiva de androides, ¡podéis volver
         al pasado con la victoria en vuestra mano!
       </p>
-      <p class="italic">
+      <p class="italic text-center">
         Has completado con éxito el Scape Room en
         <span class="text-primary">{{ finalTime }}</span>
       </p>
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import intervalToDuration from "date-fns/intervalToDuration";
 import formatDuration from "date-fns/formatDuration";
 import { es } from "date-fns/locale";
@@ -52,6 +52,8 @@ import { invoke } from "@tauri-apps/api/tauri";
 import confetti from "canvas-confetti";
 
 const completed = ref(false);
+
+const error = ref("");
 
 const progress = ref(0);
 const displayProgress = computed(() =>
@@ -118,5 +120,9 @@ watch(completed, (val) => {
       locale: es,
     }
   );
+});
+
+onMounted(() => {
+  window.onerror = (e) => (error.value += e.toString());
 });
 </script>
